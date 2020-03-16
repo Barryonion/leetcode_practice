@@ -92,6 +92,43 @@ public class SinglyLinkedList {
         tail.next = p;//把尾节点指针指向第index个节点
     }
 
+    /*两个有序的链表合并*/
+    private void mergeTwoSortedLinkeList(SinglyLinkedList linkedList1, SinglyLinkedList linkedList2) {
+        Node mergedHead = new Node(999,null);
+        Node mergedTail = mergedHead;
+        Node l1 = linkedList1.head.next;//分别指向各自链表第一个元素。
+        Node l2 = linkedList2.head.next;
+        /*1有序递增*/
+        while (l1 != null || l2 != null) {
+            if (l1.data <= l2.data) {
+                mergedTail.next = l1;
+                l1 = l1.next;
+                continue;
+            }
+            mergedTail.next = l2;
+            l2 = l2.next;
+        }
+        if (l1 == null) {
+            mergedTail.next = l2;
+        }if (l2 == null) {
+            mergedTail.next = l1;
+        }
+        /*2有序递减*/
+        while (l1 != null || l2 != null) {
+            if (l1.data >= l2.data) {
+                mergedTail.next = l1;
+                l1 = l1.next;
+                continue;
+            }
+            mergedTail.next = l2;
+            l2 = l2.next;
+        }
+        if (l1 == null) {
+            mergedTail.next = l2;
+        }if (l2 == null) {
+            mergedTail.next = l1;
+        }
+    }
 
 
 
