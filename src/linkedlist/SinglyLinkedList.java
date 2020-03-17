@@ -106,7 +106,7 @@ public class SinglyLinkedList {
         while (l1 != null && l2 != null) {
             /*两个链表均有序递增*/
             if (l1.data < linkedList1.tail.data && l2.data < linkedList2.tail.data) {
-                if (l1.data <= l2.data) {
+                if (l1.data <= l2.data) {               /*对于l1、l2都指向最后一个节点时进行如下判断：1.讲当前tail节点与l1、l2进行比较，以确定是递增有序、还是递减有序来决定先合并哪个节点*/
                     singlyLinkedList.tail.next = l1;
                     singlyLinkedList.tail = l1;//更新尾节点
                     l1 = l1.next;
@@ -115,19 +115,43 @@ public class SinglyLinkedList {
                     singlyLinkedList.tail = l2;//更新尾节点
                     l2 = l2.next;
                 }
-            } else if (l1.data > linkedList1.tail.data && l2.data > linkedList2.tail.data) {//此条件有问题吗？
-                /*两个链表均有序递减或一增一减*/
+            }else if (l1.data > linkedList1.tail.data && l2.data > linkedList2.tail.data) {//此条件有问题吗？
+                /*两个链表均有序递减或一增一减*/     //此if条件有问题，因为最终l1、l2会指向尾节点，出现相等的情况，此时判断条件为flase，会执行else语句进入无限循环
                 if (l1.data >= l2.data) {
                     singlyLinkedList.tail.next = l1;
                     singlyLinkedList.tail = l1;//更新尾节点
                     l1 = l1.next;
+                    System.out.println("111");
                 } else {
                     singlyLinkedList.tail.next = l2;
                     singlyLinkedList.tail = l2;//更新尾节点
                     l2 = l2.next;
+                    System.out.println("222");
                 }
             } else {
-
+                if (singlyLinkedList.tail.data > l1.data && singlyLinkedList.tail.data > l2.data) {//递减有序
+                    if (l1.data >= l2.data) {
+                        singlyLinkedList.tail.next = l1;
+                        singlyLinkedList.tail = l1;//更新尾节点
+                        l1 = l1.next;
+                        System.out.println("111");
+                    } else {
+                        singlyLinkedList.tail.next = l2;
+                        singlyLinkedList.tail = l2;//更新尾节点
+                        l2 = l2.next;
+                        System.out.println("222");
+                    }
+                } else {//递增有序
+                    if (l1.data <= l2.data) {
+                        singlyLinkedList.tail.next = l1;
+                        singlyLinkedList.tail = l1;
+                        l1 = l1.next;
+                    } else {
+                        singlyLinkedList.tail.next = l2;
+                        singlyLinkedList.tail = l2;
+                        l2 = l2.next;
+                    }
+                }
             }
 
         }
