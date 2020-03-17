@@ -93,55 +93,79 @@ public class SinglyLinkedList {
     }
 
     /*两个有序的链表合并*/
-    private void mergeTwoSortedLinkeList(SinglyLinkedList linkedList1, SinglyLinkedList linkedList2) {
-        Node mergedHead = new Node(999,null);
-        Node mergedTail = mergedHead;
-        Node l1 = linkedList1.head.next;//分别指向各自链表第一个元素。
+    private SinglyLinkedList mergeTwoSortedLinkeList(SinglyLinkedList linkedList1, SinglyLinkedList linkedList2) {
+        SinglyLinkedList singlyLinkedList = new SinglyLinkedList();
+        /*边界条件判断：判断入参的链表情况，是否有仅存在头节点的情况*/
+        if (linkedList1.head == linkedList1.tail || linkedList2.head == linkedList2.tail) {
+            System.out.println("待合并的链表中，存在空链表，请传入正确的有序链表！");
+            return singlyLinkedList;
+        }
+        /*初始化时，l1,l2分别指向各自链表的第一个元素。*/
+        Node l1 = linkedList1.head.next;
         Node l2 = linkedList2.head.next;
-        /*1有序递增*/
-        while (l1 != null || l2 != null) {
-            if (l1.data <= l2.data) {
-                mergedTail.next = l1;
-                l1 = l1.next;
-                continue;
+        while (l1 != null && l2 != null) {
+            /*两个链表均有序递增*/
+            if (l1.data < linkedList1.tail.data && l2.data < linkedList2.tail.data) {
+                if (l1.data <= l2.data) {
+                    singlyLinkedList.tail.next = l1;
+                    singlyLinkedList.tail = l1;//更新尾节点
+                    l1 = l1.next;
+                } else {
+                    singlyLinkedList.tail.next = l2;
+                    singlyLinkedList.tail = l2;//更新尾节点
+                    l2 = l2.next;
+                }
+            } else if (l1.data > linkedList1.tail.data && l2.data > linkedList2.tail.data) {//此条件有问题吗？
+                /*两个链表均有序递减或一增一减*/
+                if (l1.data >= l2.data) {
+                    singlyLinkedList.tail.next = l1;
+                    singlyLinkedList.tail = l1;//更新尾节点
+                    l1 = l1.next;
+                } else {
+                    singlyLinkedList.tail.next = l2;
+                    singlyLinkedList.tail = l2;//更新尾节点
+                    l2 = l2.next;
+                }
+            } else {
+
             }
-            mergedTail.next = l2;
-            l2 = l2.next;
+
         }
         if (l1 == null) {
-            mergedTail.next = l2;
-        }if (l2 == null) {
-            mergedTail.next = l1;
+            singlyLinkedList.tail.next = l2;
+            singlyLinkedList.tail = linkedList2.tail;//更新尾节点
         }
-        /*2有序递减*/
-        while (l1 != null || l2 != null) {
-            if (l1.data >= l2.data) {
-                mergedTail.next = l1;
-                l1 = l1.next;
-                continue;
-            }
-            mergedTail.next = l2;
-            l2 = l2.next;
+        if (l2 == null) {
+            singlyLinkedList.tail.next = l1;
+            singlyLinkedList.tail = linkedList1.tail;//更新尾节点
         }
-        if (l1 == null) {
-            mergedTail.next = l2;
-        }if (l2 == null) {
-            mergedTail.next = l1;
-        }
+        return singlyLinkedList;
     }
 
 
 
     public static void main(String[] args) {
-        int[] datas = {1, 2, 3, 4, 5, 6, 7};
-        SinglyLinkedList singlyLinkedList = new SinglyLinkedList();
-        for (int i = 0; i <datas.length ; i++) {
-            singlyLinkedList.insertToTail(datas[i]);
+        int[] datas1 = {9,7,5,3,1};
+        int[] datas2 = {8,6,4,2,0};
+        SinglyLinkedList singlyLinkedList1 = new SinglyLinkedList();
+        for (int i = 0; i <datas1.length ; i++) {
+            singlyLinkedList1.insertToTail(datas1[i]);
         }
-        singlyLinkedList.printAllNode();
+        SinglyLinkedList singlyLinkedList2 = new SinglyLinkedList();
+        for (int i = 0; i <datas2.length ; i++) {
+            singlyLinkedList2.insertToTail(datas2[i]);
+        }
+        singlyLinkedList1.printAllNode();
+        singlyLinkedList2.printAllNode();
+        SinglyLinkedList mergedLinkeList = singlyLinkedList1.mergeTwoSortedLinkeList(singlyLinkedList1, singlyLinkedList2);
+        mergedLinkeList.printAllNode();
 //        singlyLinkedList.reverseLinkedList();
 //        singlyLinkedList.setCycleLinkedList(2);
-        System.out.println(singlyLinkedList.isCycleLinkedList());
+//        System.out.println(singlyLinkedList.isCycleLinkedList());
 //        singlyLinkedList.printAllNode();
+
+
+
+
     }
 }
