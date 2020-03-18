@@ -42,7 +42,7 @@ public class SinglyLinkedList {
             System.out.print(cur.data + "---");
             cur = cur.next;
         } while (cur != null);
-        System.out.println("\n打印完毕！");
+        System.out.println("\n打印完毕！\n\n");
     }
     private void reverseLinkedList() {
         if(head.next == null || head.next == tail) return;//若无节点或只有一个节点，则无需反转！
@@ -108,52 +108,43 @@ public class SinglyLinkedList {
             if (l1.data < linkedList1.tail.data && l2.data < linkedList2.tail.data) {
                 if (l1.data <= l2.data) {               /*对于l1、l2都指向最后一个节点时进行如下判断：1.讲当前tail节点与l1、l2进行比较，以确定是递增有序、还是递减有序来决定先合并哪个节点*/
                     singlyLinkedList.tail.next = l1;
-                    singlyLinkedList.tail = l1;//更新尾节点
                     l1 = l1.next;
                 } else {
                     singlyLinkedList.tail.next = l2;
-                    singlyLinkedList.tail = l2;//更新尾节点
                     l2 = l2.next;
                 }
+                singlyLinkedList.tail = singlyLinkedList.tail.next;
             }else if (l1.data > linkedList1.tail.data && l2.data > linkedList2.tail.data) {//此条件有问题吗？
-                /*两个链表均有序递减或一增一减*/     //此if条件有问题，因为最终l1、l2会指向尾节点，出现相等的情况，此时判断条件为flase，会执行else语句进入无限循环
+                /*两个链表均有序递减*/     //此if条件有问题，因为最终l1、l2会指向尾节点，出现相等的情况，此时判断条件为flase，会执行else语句进入无限循环
                 if (l1.data >= l2.data) {
                     singlyLinkedList.tail.next = l1;
-                    singlyLinkedList.tail = l1;//更新尾节点
                     l1 = l1.next;
-                    System.out.println("111");
                 } else {
                     singlyLinkedList.tail.next = l2;
-                    singlyLinkedList.tail = l2;//更新尾节点
                     l2 = l2.next;
-                    System.out.println("222");
                 }
+                singlyLinkedList.tail = singlyLinkedList.tail.next;
             } else {
                 if (singlyLinkedList.tail.data > l1.data && singlyLinkedList.tail.data > l2.data) {//递减有序
                     if (l1.data >= l2.data) {
                         singlyLinkedList.tail.next = l1;
-                        singlyLinkedList.tail = l1;//更新尾节点
                         l1 = l1.next;
-                        System.out.println("111");
                     } else {
                         singlyLinkedList.tail.next = l2;
-                        singlyLinkedList.tail = l2;//更新尾节点
                         l2 = l2.next;
-                        System.out.println("222");
                     }
+                    singlyLinkedList.tail = singlyLinkedList.tail.next;
                 } else {//递增有序
                     if (l1.data <= l2.data) {
                         singlyLinkedList.tail.next = l1;
-                        singlyLinkedList.tail = l1;
                         l1 = l1.next;
                     } else {
                         singlyLinkedList.tail.next = l2;
-                        singlyLinkedList.tail = l2;
                         l2 = l2.next;
                     }
+                    singlyLinkedList.tail = singlyLinkedList.tail.next;
                 }
             }
-
         }
         if (l1 == null) {
             singlyLinkedList.tail.next = l2;
@@ -161,15 +152,72 @@ public class SinglyLinkedList {
         }
         if (l2 == null) {
             singlyLinkedList.tail.next = l1;
-            singlyLinkedList.tail = linkedList1.tail;//更新尾节点
+            singlyLinkedList.tail = linkedList1.tail;
         }
         return singlyLinkedList;
     }
 
 
+    /*删除倒数第n个节点*/
+    private void deleteNthNodeFromEnd(int n) {
+        /*首先判断输入的n是否有效*/
+        int totalNodes = 0;
+        Node p = head.next;
+        while (p != null) {
+            p = p.next;
+            totalNodes++;
+        }
+        if (n > totalNodes) {
+            System.out.println("输入的n值大于链表长度");
+            return;
+        }
+        Node slow = head.next;
+        Node fast = slow;
+        for (int i = 0; i < n; i++) {
+            fast = fast.next;
+        }
+        if (fast == null) {//删除第一个元素节点的情况
+            head.next = head.next.next;
+            return;
+        }
+        while (fast.next != null) {//当fast指向最后一个节点时退出循环
+            fast = fast.next;
+            slow = slow.next;
+        }
+        slow.next = slow.next.next;//删除倒数第n个节点
+    }
+
+    /*求链表的中间节点*/
+    private Node[] findMiddleNode() {
+        Node[] nodes = new Node[2];
+        if (head == tail) {
+            System.out.println("此链表为空！");
+            return null;
+        }
+        if (head.next == tail) {
+            System.out.println("此链表仅有一个节点！");
+            nodes[0] = tail;
+            return nodes;
+        }
+        Node slow = head.next;
+        Node fast = slow;
+        while (fast.next != tail && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        /*链表长度为奇数或者偶数的判断*/
+        if (fast.next == null) {//奇数
+            nodes[0] = slow;
+            return nodes;
+        }
+        nodes[0] = slow;
+        nodes[1] = slow.next;
+        return nodes;
+    }
+
 
     public static void main(String[] args) {
-        int[] datas1 = {9,7,5,3,1};
+        int[] datas1 = {9,7,3,1};
         int[] datas2 = {8,6,4,2,0};
         SinglyLinkedList singlyLinkedList1 = new SinglyLinkedList();
         for (int i = 0; i <datas1.length ; i++) {
@@ -179,14 +227,22 @@ public class SinglyLinkedList {
         for (int i = 0; i <datas2.length ; i++) {
             singlyLinkedList2.insertToTail(datas2[i]);
         }
+        System.out.println("链表操作前：");
         singlyLinkedList1.printAllNode();
-        singlyLinkedList2.printAllNode();
-        SinglyLinkedList mergedLinkeList = singlyLinkedList1.mergeTwoSortedLinkeList(singlyLinkedList1, singlyLinkedList2);
-        mergedLinkeList.printAllNode();
+//        singlyLinkedList2.printAllNode();
+//        System.out.println("链表操作后：");
+//        singlyLinkedList1.deleteNthNodeFromEnd(5);
+//        singlyLinkedList2.deleteNthNodeFromEnd(6);
+//        singlyLinkedList1.printAllNode();
+//        singlyLinkedList2.printAllNode();
+//        SinglyLinkedList mergedLinkeList = singlyLinkedList1.mergeTwoSortedLinkeList(singlyLinkedList1, singlyLinkedList2);
+//        mergedLinkeList.printAllNode();
 //        singlyLinkedList.reverseLinkedList();
 //        singlyLinkedList.setCycleLinkedList(2);
 //        System.out.println(singlyLinkedList.isCycleLinkedList());
 //        singlyLinkedList.printAllNode();
+        Node[] middleNodes = singlyLinkedList1.findMiddleNode();
+        System.out.println("链表的中间节点为：" + middleNodes[0].data+ "和" + middleNodes[1].data);
 
 
 
