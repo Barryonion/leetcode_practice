@@ -157,34 +157,37 @@ public class SinglyLinkedList {
         return singlyLinkedList;
     }
 
-
     /*删除倒数第n个节点*/
     private void deleteNthNodeFromEnd(int n) {
         /*首先判断输入的n是否有效*/
-        int totalNodes = 0;
-        Node p = head.next;
-        while (p != null) {
-            p = p.next;
-            totalNodes++;
+        int count = 1;
+        Node fast = head.next;
+        while (fast != null && count < n) {
+            fast = fast.next;
+            count++;
         }
-        if (n > totalNodes) {
+        if (fast == null) {
             System.out.println("输入的n值大于链表长度");
             return;
         }
-        Node slow = head.next;
-        Node fast = slow;
-        for (int i = 0; i < n; i++) {
-            fast = fast.next;
-        }
-        if (fast == null) {//删除第一个元素节点的情况
-            head.next = head.next.next;
+        if (count > n) {
+            System.out.println("请输入正整数！");
             return;
         }
+        /*拉开快慢指针间隔*/
+        Node slow = head.next;
+        Node pre = null;
         while (fast.next != null) {//当fast指向最后一个节点时退出循环
             fast = fast.next;
+            pre = slow;
             slow = slow.next;
         }
-        slow.next = slow.next.next;//删除倒数第n个节点
+        if (pre == null) {//当倒数第n（n为链表长度）个节点要被删除时
+            head.next = head.next.next;
+        } else {
+            pre.next = pre.next.next;
+        }
+        return;
     }
 
     /*求链表的中间节点*/
@@ -201,9 +204,9 @@ public class SinglyLinkedList {
         }
         Node slow = head.next;
         Node fast = slow;
-        while (fast.next != tail && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
+        while (fast.next != tail && fast.next != null) {//当链表为奇数时，一旦fast指向尾节点，则结束while循环，此时slow正好指向中间节点
+            slow = slow.next;                           //当链表为偶数时，一旦fast指向倒数第二个节点，则结束while循环，此时slow正好指向中间节点
+            fast = fast.next.next;                      //注意为偶数时有两个中间节点
         }
         /*链表长度为奇数或者偶数的判断*/
         if (fast.next == null) {//奇数
@@ -217,7 +220,7 @@ public class SinglyLinkedList {
 
 
     public static void main(String[] args) {
-        int[] datas1 = {9,7,3,1};
+        int[] datas1 = {9,7,5,3,1};
         int[] datas2 = {8,6,4,2,0};
         SinglyLinkedList singlyLinkedList1 = new SinglyLinkedList();
         for (int i = 0; i <datas1.length ; i++) {
@@ -230,10 +233,10 @@ public class SinglyLinkedList {
         System.out.println("链表操作前：");
         singlyLinkedList1.printAllNode();
 //        singlyLinkedList2.printAllNode();
-//        System.out.println("链表操作后：");
-//        singlyLinkedList1.deleteNthNodeFromEnd(5);
+        System.out.println("链表操作后：");
+        singlyLinkedList1.deleteNthNodeFromEnd(0);
 //        singlyLinkedList2.deleteNthNodeFromEnd(6);
-//        singlyLinkedList1.printAllNode();
+        singlyLinkedList1.printAllNode();
 //        singlyLinkedList2.printAllNode();
 //        SinglyLinkedList mergedLinkeList = singlyLinkedList1.mergeTwoSortedLinkeList(singlyLinkedList1, singlyLinkedList2);
 //        mergedLinkeList.printAllNode();
@@ -241,8 +244,8 @@ public class SinglyLinkedList {
 //        singlyLinkedList.setCycleLinkedList(2);
 //        System.out.println(singlyLinkedList.isCycleLinkedList());
 //        singlyLinkedList.printAllNode();
-        Node[] middleNodes = singlyLinkedList1.findMiddleNode();
-        System.out.println("链表的中间节点为：" + middleNodes[0].data+ "和" + middleNodes[1].data);
+//        Node[] middleNodes = singlyLinkedList1.findMiddleNode();
+//        System.out.println("链表的中间节点为：" + middleNodes[0].data+ "和" + middleNodes[1].data);
 
 
 
