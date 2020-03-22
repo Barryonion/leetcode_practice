@@ -8,7 +8,8 @@ public class Sort {
         int[] nums = {3,8,9,6,5,4,1,7};
         long startTime = System.nanoTime();
 //        sort.mergeSort(nums, 0, nums.length - 1);
-        sort.quickSort(nums,0,nums.length-1);
+//        sort.quickSort(nums,0,nums.length-1);
+        sort.insertSort(nums);
         long endTime = System.nanoTime();
         System.out.println("排序执行时长：" + (endTime - startTime));
         for (int i = 0; i < nums.length; i++) {
@@ -16,6 +17,18 @@ public class Sort {
                 System.out.print(nums[i]);
             }*/
             System.out.print(nums[i]+",");
+        }
+    }
+
+    private void insertSort(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            int val = nums[i];
+            int index = i - 1;
+            while (index >= 0 && nums[index] > val) {
+                nums[index + 1] = nums[index];
+                index--;
+            }
+            nums[index + 1] = val;
         }
     }
 
