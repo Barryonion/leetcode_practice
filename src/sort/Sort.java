@@ -5,11 +5,13 @@ public class Sort {
         Sort sort = new Sort();
 //        int[] nums = {23,45,1,45,75,37,38,86,234,33,75,8,45,657,5,6,97,45,8};
 //        int[] nums = {3,8,9,6};
-        int[] nums = {3,8,9,6,5,4,1,7};
+        int[] nums = {8,5,6,3,4,1,7};
         long startTime = System.nanoTime();
 //        sort.mergeSort(nums, 0, nums.length - 1);
 //        sort.quickSort(nums,0,nums.length-1);
-        sort.insertSort(nums);
+//        sort.insertSort(nums);
+//        sort.bubbleSort(nums);
+        sort.selectSort(nums);
         long endTime = System.nanoTime();
         System.out.println("排序执行时长：" + (endTime - startTime));
         for (int i = 0; i < nums.length; i++) {
@@ -20,17 +22,51 @@ public class Sort {
         }
     }
 
+    private void selectSort(int[] nums) {
+        for (int i = 0; i < nums.length-1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[minIndex] > nums[j]) {
+                    minIndex = j;
+                }
+            }
+            int tmp = nums[minIndex];
+            nums[minIndex] = nums[i];
+            nums[i] = tmp;
+        }
+    }
+
+    private void bubbleSort(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {//冒泡趟数
+            boolean flag = false;
+            for (int j = 0; j < nums.length - 1; j++) {//两两比较
+                if (nums[j] > nums[j + 1]) {
+                    int tmp = nums[j + 1];
+                    nums[j + 1] = nums[j];
+                    nums[j] = tmp;
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                break;
+            }
+        }
+    }
+
+
+
     private void insertSort(int[] nums) {
         for (int i = 0; i < nums.length; i++) {
-            int val = nums[i];
+            int tempVal = nums[i];
             int index = i - 1;
-            while (index >= 0 && nums[index] > val) {
+            while (index >= 0 && nums[index] > tempVal) {
                 nums[index + 1] = nums[index];
                 index--;
             }
-            nums[index + 1] = val;
+            nums[index + 1] = tempVal;
         }
     }
+
 
     private void quickSort(int[] nums, int lowIndex, int hignIndex) {
         if (lowIndex >= hignIndex) {
