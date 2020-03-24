@@ -11,15 +11,51 @@ public class Sort {
 //        sort.quickSort(nums,0,nums.length-1);
 //        sort.insertSort(nums);
 //        sort.bubbleSort(nums);
-        sort.selectSort(nums);
-        long endTime = System.nanoTime();
-        System.out.println("排序执行时长：" + (endTime - startTime));
-        for (int i = 0; i < nums.length; i++) {
-            /*if (i == nums.length - 1) {
-                System.out.print(nums[i]);
-            }*/
-            System.out.print(nums[i]+",");
+//        sort.selectSort(nums);
+        System.out.println(sort.KthElement(nums,4));
+
+//        long endTime = System.nanoTime();
+//        System.out.println("排序执行时长：" + (endTime - startTime));
+//        for (int i = 0; i < nums.length; i++) {
+//            /*if (i == nums.length - 1) {
+//                System.out.print(nums[i]);
+//            }*/
+//            System.out.print(nums[i]+",");
+//        }
+    }
+
+    private int KthElement(int[] nums, int k) {
+        if (nums == null || nums.length < k) {
+            return -1;
         }
+        int patitionIndex = patitionIndex(nums, 0, nums.length - 1);
+        while (patitionIndex + 1 != k) {
+            if (patitionIndex + 1 < k) {
+                patitionIndex = patitionIndex(nums, patitionIndex + 1, nums.length - 1);
+            } else {
+                patitionIndex = patitionIndex(nums, 0, patitionIndex - 1);
+            }
+        }
+        return nums[patitionIndex];
+    }
+
+    private int patitionIndex(int[] nums, int p, int r) {
+        int pivot = nums[r];
+        int i = p;
+        for (int j = p; j < r; j++) {
+            if (nums[j] <= pivot) {
+                swap(nums,i, j);
+                i++;
+            }
+        }
+        swap(nums, i, r);
+        return i;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
     }
 
     private void selectSort(int[] nums) {
