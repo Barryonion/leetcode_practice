@@ -1,8 +1,8 @@
 package main
 
-func QuickSort(arr []int) []int {
-	separateSort(arr, 0, len(arr)-1)
-	return arr
+func sortArray(nums []int) []int {
+	separateSort(nums, 0, len(nums)-1)
+	return nums
 }
 
 func separateSort(arr []int, start, end int) {
